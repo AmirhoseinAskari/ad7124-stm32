@@ -23,7 +23,7 @@ int main(void)
     // ...
 	
 		
-	  AD7124_Handler.SPIx = &hspi2;
+    AD7124_Handler.SPIx = &hspi2;
     AD7124_Handler.csPort = GPIOB;
     AD7124_Handler.csPin = GPIO_PIN_12;
     AD7124_Handler.IRQn = EXTI9_5_IRQn; 
