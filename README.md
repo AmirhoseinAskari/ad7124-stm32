@@ -4,7 +4,7 @@ STM32 HAL driver for the AD7124 24-bit Sigma-Delta ADC using SPI communication.
 
 ## 🔧 Features
 - ✅ **Fully STM32 HAL compatible** — supports all STM32 MCU series (F0–F7, G0/G4, H7, L0–L5, U0/U5)
-- ⚡ **Interrupt-driven SPI data acquisition — uses an external interrupt on the DOUT/RDY pin to read data (not polling mode)
+- ⚡ **Interrupt-driven SPI data acquisition — uses interrupt mode on the DOUT/RDY pin to read samples instead of polling mode
 - 📥 **Complete register access and calibration** — full support for reading/writing all registers, including internla calibration
 - 🛡️ **MISRA-C-inspired design** — clean, safe, and portable code for embedded and safety-critical applications
 - 🔄 **Modular and portable** — compatible with STM32CubeIDE, Keil, IAR, or Makefile-based environments
