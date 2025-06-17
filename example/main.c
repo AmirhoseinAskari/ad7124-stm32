@@ -18,6 +18,7 @@ double voltage;
 float temperature;
 
 
+
 int main(void)
 {
   
@@ -27,6 +28,8 @@ int main(void)
     // MX_GPIO_Init();
     // MX_SPI2_Init();
     // etc...
+	
+	
 
     /* Configure AD7124 handler structure */
     AD7124_Handler.SPIx = &hspi2;        // SPI peripheral used
@@ -37,36 +40,36 @@ int main(void)
     HAL_NVIC_DisableIRQ(AD7124_Handler.IRQn);               // Disable IRQ during initial config
     status[0U] = AD7124_Config(&AD7124_Handler, &configA);  // Initialize and configure the AD7124
     HAL_NVIC_EnableIRQ(AD7124_Handler.IRQn);                // Re-enable interrupt after initialization
+	
 
     while (1)
     {
-
-        /* Check if data is ready (set in external interrupt) */      
-        if (ad7124_rdy_flag)
-        {
-            HAL_NVIC_DisableIRQ(AD7124_Handler.IRQn);  // Temporarily disable interrupt
-
-	    /* Optional: check for errors */
-            status[1U] = AD7124_ErrorCheck(&AD7124_Handler, &ad7124_error);
-
+        /* Check if data is ready (set in external interrupt) */
+	if (ad7124_rdy_flag)
+	{
+	    HAL_NVIC_DisableIRQ(AD7124_Handler.IRQn);  // Temporarily disable interrupt
+			
+            /* Optional: check for errors */
+	    status[1U] = AD7124_ErrorCheck(&AD7124_Handler, &ad7124_error);
+			
 	    /* Read conversion results from ADC */
-            status[2U] = AD7124_ReadSampleData(&AD7124_Handler);
-
+	    status[2U] = AD7124_ReadSampleData(&AD7124_Handler);
+			
 	    /* Process raw ADC values if available */
-            if (AD7124_ChannelSamples[0] && AD7124_ChannelSamples[1])
-            {
+	    if (AD7124_ChannelSamples[0] && AD7124_ChannelSamples[1])
+	    {
 		// Convert raw ADC data from channel 0 to millivolts (example scaling)
-                voltage = ( ( (double)(AD7124_ChannelSamples[0U] / 8388608.0) - 1.0) * 2.5) * 1000.0;
-
+		voltage = ( ( (double)(AD7124_ChannelSamples[0U] / 8388608.0) - 1.0) * 2.5) * 1000.0;
+				
 		// Convert raw ADC data from channel 1 to temperature in °C
-                temperature = ( (AD7124_ChannelSamples[1U] - 8388608.0) / 13548.0) - 272.5;
-            }
-            
-            ad7124_rdy_flag = 0U;                     // Clear ready flag
-            HAL_NVIC_EnableIRQ(AD7124_Handler.IRQn);  // Re-enable interrupt
+		temperature = ( (AD7124_ChannelSamples[1U] - 8388608.0) / 13548.0) - 272.5;
+	    }
+			
+	    ad7124_rdy_flag = 0U;                     // Clear ready flag
+	    HAL_NVIC_EnableIRQ(AD7124_Handler.IRQn);  // Re-enable interrupt
         }
-
-
-	// Your other application code here
+		
+        // Your other application code here
+		
     }
 }
